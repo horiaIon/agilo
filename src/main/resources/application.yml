@@ -1,0 +1,55 @@
+server:
+  port: ${user.application.port:8060}
+
+spring.profiles.active: dev
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+
+############  Actuator properties #############
+info:
+  group: @project.groupId@
+  artifact: @project.artifactId@
+  name: @project.name@
+  description: @project.description@
+  version: @project.version@
+  stage: ${spring.profiles.active}
+############  END Actuator properties #############
+
+management:
+  port: ${server.port}
+
+captcha:
+  useproxy: false
+  proxyhost:
+  faiureurl: /
+  privatekey: 6LcAt98SAAAAAOr7UrY5rv_E6iOGQfJ0O75dfkg0
+
+---
+################################ DEV PROFILE ######################
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:h2:mem:public;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=false;INIT=CREATE SCHEMA IF NOT EXISTS "public"
+  jpa:
+    show-sql: false
+    properties.hibernate:
+      format_sql: true
+      cache:
+        use_second_level_cache: false
+  resources:
+    static-locations: classpath:/static/dist.dev/
+  devtools:
+    livereload.enabled: true
+#  devtools:
+#    livereload:
+#      port: 35728
+
+flyway:
+  enabled: true
+  locations: classpath:db/migration
+  schemas: public

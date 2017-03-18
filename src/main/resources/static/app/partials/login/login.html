@@ -1,0 +1,67 @@
+<!-- start: LOGIN -->
+<div class="container padding-top-30">
+    <div class="row" ng-controller="LoginCtrl">
+        <div class="main-login col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+            <!-- start: LOGIN BOX -->
+            <div class="box-login">
+                <fieldset>
+                    <legend>
+                        Sign in
+                    </legend>
+                    <form name="loginform" role="form" ng-submit="vbbLogin()"
+                          class="form-login ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                          form-autofill-fix novalidate>
+
+                        <div class="form-group" ng-class="{ 'has-error' : loginform.username.$invalid && loginform.username.$dirty }">
+                            <span class="input-icon">
+                                <input type="email" class="form-control" ng-model="username" name="username"
+                                       autofill="autofill" placeholder="Email*"
+                                       required ng-minlength="1" ng-maxlength="50" autofocus="true">
+                            </span>
+                            <div ng-show="loginform.username.$dirty && loginform.username.$invalid">
+                                <p ng-show="loginform.username.$invalid" class="help-block red-text">
+                                    Enter a valid email
+                                </p>
+                                <p ng-show="loginform.username.$error.maxlength" class="help-block red-text">
+                                    Email cannot be longer than 50 characters
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-group form-actions" ng-class="{ 'has-error' : loginform.password.$invalid && loginform.password.$dirty }">
+                            <span class="input-icon">
+                                <input type="password" class="form-control password" ng-model="password" name="password"
+                                       autofill="autofill" placeholder="Password*"
+                                       required ng-minlength="4" ng-maxlength="50">
+                            </span>
+                            <div ng-show="loginform.password.$dirty && loginform.password.$invalid">
+                                <p ng-show="loginform.password.$error.required" class="help-block red-text">
+                                    Password is required
+                                </p>
+                                <p ng-show="loginform.password.$error.minlength" class="help-block red-text">
+                                    Password is required to be at least 4 characters
+                                </p>
+                                <p ng-show="loginform.password.$error.maxlength" class="help-block red-text">
+                                    Password cannot be longer than 50 characters
+                                </p>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary pull-right">
+                                Login <i class="fa fa-arrow-circle-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="new-account">
+                        Don't have an account?
+                        <a ui-sref="app.login.registration">
+                            Register
+                        </a>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- end: LOGIN BOX -->
+        </div>
+    </div>
+</div>
+
+<!-- end: LOGIN -->

@@ -1,0 +1,15 @@
+<div class="container">
+    <div>
+        <!--notifications-->
+        <div class="alert container alert-{{status}} padding-bottom-10" ng-show="status">
+            <a class="close" href="" ng-click="hideNotification()">×</a>
+
+            <p ng-bind-html="notification" class="text-center"></p>
+        </div>
+
+        <!-- start: MAIN CONTENT -->
+        <div ui-view class="wrap-content fade-in-up bg-white"
+             ng-class="{'container':agiloAuthenticated}" id="container"></div>
+        <!-- end: MAIN CONTENT -->
+    </div>
+</div>

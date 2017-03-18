@@ -1,0 +1,11 @@
+<!-- welcome -->
+<div ng-if="!agiloAuthenticated" data-ng-include=" viewsDirectory + 'welcome.html' "></div>
+<!-- / welcome -->
+
+<div ng-if="agiloAuthenticated" class="container-fluid container-fullw bg-white">
+    <div class="text-center">
+        Welcome {{appAccount.firstName}}!
+        <br/>
+        <a href="" ng-click="logout()"><i class="fa fa-sign-out"></i>Logout</a>
+    </div>
+</div>
