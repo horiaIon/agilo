@@ -24,7 +24,10 @@ angular.module("agiloApp").run(['$state', '$stateParams', '$rootScope', 'cfpLoad
             cfpLoadingBar.start();
             $rootScope.hideNotification();
 
-            if(!$rootScope.agiloAuthenticated  && $cookies.get('XSRF-TOKEN') === undefined) {
+            //authorization stuff
+            AuthenticationService.valid(toState.access.authorizedRoles, event);
+
+            if (!$rootScope.agiloAuthenticated && $cookies.get('XSRF-TOKEN') === undefined) {
                 //make a post call to get a new XSRF-TOKEN
                 AuthenticationService.getNewXsrfToken();
             }

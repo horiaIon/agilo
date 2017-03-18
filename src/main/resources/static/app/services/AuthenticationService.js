@@ -2,11 +2,15 @@
 angular.module("agiloApp").factory('Session', function() {
     'use strict';
 
-    this.create = function(userName, firstName, lastName, userRoles) {
+    this.create = function(userName, firstName, lastName, authorities) {
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userRoles = userRoles;
+        var roles = [];
+        angular.forEach(authorities, function(authorizedRole) {
+            roles.push(authorizedRole.name);
+        });
+        this.userRoles = roles;
     };
     this.invalidate = function() {
         this.userName = null;
@@ -68,15 +72,54 @@ angular.module("agiloApp").factory('AuthenticationService', ['$rootScope', '$htt
                             Session.create(null, 'User', null, null);
                             $rootScope.agiloAuthenticated = false;
                         } else {
-                            Session.create(data.userName, data.firstName, data.lastName, data.roles);
+                            Session.create(data.userName, data.firstName, data.lastName, data.authorities);
                             $rootScope.agiloAuthenticated = true;
                         }
                         $rootScope.appAccount = Session;
+                        console.log('appAccount: ', $rootScope.appAccount);
                     }, function err() {
                         Session.create(null, 'User', null, null);
                         $rootScope.appAccount = Session;
                         $rootScope.agiloAuthenticated = false;
                     });
+            },
+            valid: function(authorizedRoles, event) {
+                //console.log('AuthService.valid: ', Session.userName);
+                if (!Session.userName) {
+                    UserAccountService.getAccount.get(function(data) {
+                        $rootScope.agiloAuthenticated = data.firstName !== undefined;
+                        Session.create(data.userName, data.firstName, data.lastName, data.authorities);
+                        $rootScope.appAccount = Session;
+                        functions.callIsAuthorized(authorizedRoles, event);
+                    });
+                } else {
+                    functions.callIsAuthorized(authorizedRoles, event);
+                }
+            },
+            callIsAuthorized: function(authorizedRoles, event){
+                if (!functions.isAuthorized(authorizedRoles)) {
+                    event.preventDefault();
+                    $rootScope.$broadcast("event:auth-notAuthorized");
+                }
+            },
+            isAuthorized: function(authorizedRoles) {
+                if (!angular.isArray(authorizedRoles)) {
+                    if (authorizedRoles == '*') {
+                        return true;
+                    }
+                    authorizedRoles = [authorizedRoles];
+                }
+
+                var isAuthorized = false;
+                //console.log('isAuthorized', Session.userRoles, Session.userName)
+                angular.forEach(authorizedRoles, function(authorizedRole) {
+                    var authorized = (!!Session.userName && Session.userRoles.indexOf(authorizedRole) !== -1);
+                    if (authorized || authorizedRole == '*') {
+                        isAuthorized = true;
+                    }
+                });
+
+                return isAuthorized;
             },
             //dirty csrf logout fix (logout even on error)
             logout: function() {
