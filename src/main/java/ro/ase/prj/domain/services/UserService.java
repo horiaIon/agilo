@@ -16,6 +16,7 @@ import ro.ase.prj.domain.util.dto.UserDTO;
 
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 @Slf4j
@@ -27,14 +28,17 @@ public class UserService {
     private final UserRepository      userRepository;
     private final AuthorityRepository authorityRepository;
     private final AgiloSecurityUtils  agiloSecurityUtils;
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     public UserService(final UserRepository userRepository,
                        final AuthorityRepository aAuthorityRepository,
-                       final AgiloSecurityUtils aAgiloSecurityUtils) {
+                       final AgiloSecurityUtils aAgiloSecurityUtils,
+                       final PasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.authorityRepository = aAuthorityRepository;
         this.agiloSecurityUtils = aAgiloSecurityUtils;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -82,7 +86,7 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorities.add(authority);
         newUser.setUserName(userDTO.getUserName());
-        newUser.setPassword(userDTO.getPassword());
+        newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setAuthorities(authorities);

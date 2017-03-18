@@ -8,6 +8,7 @@ dist.prod/
 logs/
 run/
 application.pid
+nbactions.xml
 
 # IntelliJ project files
 .idea

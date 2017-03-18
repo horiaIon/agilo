@@ -16,7 +16,7 @@ angular.module("agiloApp").controller('LoginCtrl',
             resetUserInfo();
 
             $scope.model = {
-                captchaKey: '6LcAt98SAAAAAD_zmXf4PWBfFZGmgouDb_HCckFV'
+                captchaKey: '6Lf3gBkUAAAAAKHVzAliceCbljX606NswdOYzIDu'
             };
 
             $scope.vbbLogin = function() {

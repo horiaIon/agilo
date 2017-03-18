@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import ro.ase.prj.domain.security.AjaxAuthenticationFailureHandler;
 import ro.ase.prj.domain.security.AgiloUserDetailsService;
@@ -18,14 +19,17 @@ public class AgiloApplicationSecurityConfig extends WebSecurityConfigurerAdapter
     private final AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
     private final AuthenticationManager            authenticationManager;
     private final AgiloUserDetailsService          agiloUserDetailsService;
-
+    private final PasswordEncoder            bCryptPasswordEncoder;
+    
     @Autowired
     public AgiloApplicationSecurityConfig(final AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler,
                                           final AuthenticationManager authenticationManager,
-                                          final AgiloUserDetailsService aAgiloUserDetailsService) {
+                                          final AgiloUserDetailsService aAgiloUserDetailsService,
+                                          final PasswordEncoder bCryptPasswordEncoder) {
         this.ajaxAuthenticationFailureHandler = ajaxAuthenticationFailureHandler;
         this.authenticationManager = authenticationManager;
         this.agiloUserDetailsService = aAgiloUserDetailsService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -94,7 +98,9 @@ public class AgiloApplicationSecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.parentAuthenticationManager(authenticationManager)
-            .userDetailsService(this.agiloUserDetailsService);
+            .userDetailsService(this.agiloUserDetailsService)
+            .passwordEncoder(bCryptPasswordEncoder);
     }
 
+    
 }

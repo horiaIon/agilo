@@ -11,13 +11,13 @@ logging:
         web: DEBUG
 
 ############  Actuator properties #############
-info:
-  group: @project.groupId@
-  artifact: @project.artifactId@
-  name: @project.name@
-  description: @project.description@
-  version: @project.version@
-  stage: ${spring.profiles.active}
+#info:
+#  group: @project.groupId@
+#  artifact: @project.artifactId@
+#  name: @project.name@
+#  description: @project.description@
+#  version: @project.version@
+#  stage: ${spring.profiles.active}
 ############  END Actuator properties #############
 
 management:
@@ -27,12 +27,12 @@ captcha:
   useproxy: false
   proxyhost:
   faiureurl: /
-  privatekey: 6LcAt98SAAAAAOr7UrY5rv_E6iOGQfJ0O75dfkg0
+  privatekey: 6Lf3gBkUAAAAAMN0_psZpEba8KbBDBuoqILlJhB2
 
 ---
 ################################ DEV PROFILE ######################
 spring:
-  profiles: dev
+  profiles: inmemory
   datasource:
     url: jdbc:h2:mem:public;MODE=MySQL;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=false;INIT=CREATE SCHEMA IF NOT EXISTS "public"
   jpa:
@@ -51,5 +51,34 @@ spring:
 
 flyway:
   enabled: true
+  locations: classpath:db/migration
+  schemas: public
+  
+---
+################################ DEV PROFILE ######################
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/xe
+    username: agilo
+    password: parola01
+    driver-class-name: oracle.jdbc.OracleDriver
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    properties.hibernate:
+      format_sql: true
+      cache:
+        use_second_level_cache: false
+  resources:
+    static-locations: classpath:/static/dist.dev/
+  devtools:
+    livereload.enabled: true
+#  devtools:
+#    livereload:
+#      port: 35728
+
+flyway:
+  enabled: false
   locations: classpath:db/migration
   schemas: public
